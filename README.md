@@ -55,9 +55,9 @@ planeId := mpManager.CreatePlane("B738", "BER", "WL", dataFunc, ref)
 
 ## Unterstütze Plattformen
 
-Linux: x64
-Mac: nicht getestet
-Windows: nicht unterstützt (siehe offenen Issue bei GO https://github.com/golang/go/issues/11058)
+- Linux: x64
+- Mac: nicht getestet
+- Windows: nicht unterstützt (siehe offenen Issue bei GO https://github.com/golang/go/issues/11058)
 
 ## License
-This library is distributed under the BSD-style license found in the LICENSE file.
+This library is distributed under license found in the LICENSE file.
