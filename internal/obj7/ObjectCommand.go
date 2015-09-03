@@ -1,3 +1,7 @@
+//Copyright (c) 2015. The goplanemp AUTHORS. All rights reserved.
+//
+// Use of this source code is governed by a license that can be found in the LICENSE file.
+
 package obj7
 
 type CommandType int

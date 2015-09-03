@@ -1,3 +1,7 @@
+//Copyright (c) 2015. The goplanemp AUTHORS. All rights reserved.
+//
+// Use of this source code is governed by a license that can be found in the LICENSE file.
+
 //Multiplayer-Bibliothek für X-Plane.
 //Die Umsetzung basiert auf dem Code der libxplanemp Bibliothek.
 //Weitere Informationen unter https://github.com/wadesworld2112/libxplanemp.

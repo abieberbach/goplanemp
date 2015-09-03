@@ -1,4 +1,8 @@
-//Enthält zusätzliche Funktionalitäten, die in der libxplanemp-Bibliothek nicht verfügbar sind.
+//Copyright (c) 2015. The goplanemp AUTHORS. All rights reserved.
+//
+// Use of this source code is governed by a license that can be found in the LICENSE file.
+
+// Enthält zusätzliche Funktionalitäten, die in der libxplanemp-Bibliothek nicht verfügbar sind.
 //
 // AircraftTest
 //
