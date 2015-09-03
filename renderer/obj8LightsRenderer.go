@@ -14,7 +14,7 @@ import (
 
 
 func (self *DefaultRenderer) drawObj8Lights(renderData *planeRenderData) {
-	if self.greenNavRef==nil {
+	if self.greenNavRef == nil {
 		self.initObj8Lights()
 	}
 	lodInfo := calculateLOD(renderData.plane.CslAircraft.ObjInfo, renderData.dist)
@@ -76,15 +76,20 @@ func appendLight(renderData *planeRenderData, currentLight *obj7.LightInfo, draw
 func (self *DefaultRenderer) initObj8Lights() {
 	_, path, _, _ := plugins.GetPluginInfo(plugins.GetMyId())
 	//aktueller Pfad ist die XPL-Datei --> noch eins nach oben
-	path=filepath.Dir(path)
+	path = filepath.Dir(path)
 	//aktueller Pfad ist jetzt der 64-Ordner --> noch eins nach oben
-	path=filepath.Dir(path)
-	self.greenNavRef = scenery.LoadObject(filepath.Join(path,"Resources","greenNavLight.obj"))
-	self.redNavRef = scenery.LoadObject(filepath.Join(path,"Resources","redNavLight.obj"))
-	self.strobeRef = scenery.LoadObject(filepath.Join(path,"Resources","strobeLight.obj"))
-	self.beaconRef = scenery.LoadObject(filepath.Join(path,"Resources","beaconLight.obj"))
-	self.landingRef = scenery.LoadObject(filepath.Join(path,"Resources","landingLight.obj"))
-	self.taxiRef = scenery.LoadObject(filepath.Join(path,"Resources","taxiLight.obj"))
-	self.otherRef = scenery.LoadObject(filepath.Join(path,"Resources","otherLight.obj"))
+	path = filepath.Dir(path)
+	if self.configuration.DisableObj8LightSpills {
+		path = filepath.Join(path,"Resources", "obj8Lights")
+	} else {
+		path = filepath.Join(path,"Resources", "obj8Lights", "spill")
+	}
+	self.greenNavRef = scenery.LoadObject(filepath.Join(path, "greenNavLight.obj"))
+	self.redNavRef = scenery.LoadObject(filepath.Join(path, "redNavLight.obj"))
+	self.strobeRef = scenery.LoadObject(filepath.Join(path, "strobeLight.obj"))
+	self.beaconRef = scenery.LoadObject(filepath.Join(path, "beaconLight.obj"))
+	self.landingRef = scenery.LoadObject(filepath.Join(path, "landingLight.obj"))
+	self.taxiRef = scenery.LoadObject(filepath.Join(path, "taxiLight.obj"))
+	self.otherRef = scenery.LoadObject(filepath.Join(path, "otherLight.obj"))
 
 }

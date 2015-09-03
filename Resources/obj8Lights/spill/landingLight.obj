@@ -1,0 +1,7 @@
+I
+800
+OBJ
+
+LIGHT_NAMED airplane_landing 0 0 0
+LIGHT_PARAM airplane_landing_sp 0 0 0 1.0 1.0 0.7 0 200 0.93
+

@@ -1,0 +1,7 @@
+I
+800
+OBJ
+
+LIGHT_NAMED airplane_strobe 0 0 0
+LIGHT_PARAM airplane_strobe_sp 0 0 0 1.00 1.00 1.00 1.00 20 0.0000 -1.000 0.0000 1.0000
+

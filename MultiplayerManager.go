@@ -52,7 +52,7 @@ func New(cslFolder, relatedFile, lightsFile, defaultICAO string, config *Configu
 	csl.CslManagerInstance.Init(cslFolder, relatedFile, defaultICAO)
 	err = texture.TextureManagerInstance.Init(config.Resolution, lightsFile, config.MergeLitTextures, config.UseAnyLitTexture)
 	if err != nil {
-		logging.Error(fmt.Sprintf("Could not load lights texture: %v", err))
+		logging.Warningf(fmt.Sprintf("Could not load lights texture: %v", err))
 		return nil, err
 	}
 	return manager, nil

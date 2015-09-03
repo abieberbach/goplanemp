@@ -1,0 +1,6 @@
+I
+800
+OBJ
+
+LIGHT_NAMED airplane_taxi 0 0 0
+LIGHT_PARAM airplane_taxi_sp 0 0 0 1.0 1.0 0.7 0 100 0.93

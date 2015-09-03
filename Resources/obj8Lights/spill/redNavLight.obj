@@ -1,0 +1,6 @@
+I
+800
+OBJ
+
+LIGHT_NAMED airplane_nav_left 0 0 0
+LIGHT_PARAM airplane_nav_sp 0 0 0 1.00 0.00 0.00 1.00 15 0.0000 -1.000 0.0000 1.0000

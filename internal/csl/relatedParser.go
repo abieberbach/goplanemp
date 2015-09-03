@@ -14,7 +14,7 @@ func parseRelatedFile(relatedFilePath string) map[string][]string {
 	relatedMap := make(map[string][]string)
 	relatedFile, err := os.Open(relatedFilePath)
 	if err != nil {
-		logging.Errorf("could not open related file \"%v\": %v", relatedFilePath, err)
+		logging.Warningf("could not open related file \"%v\": %v", relatedFilePath, err)
 		return relatedMap
 	}
 	scanner := bufio.NewScanner(relatedFile)
