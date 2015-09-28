@@ -10,7 +10,6 @@ import (
 	"strconv"
 	"os"
 	"strings"
-	"github.com/abieberbach/goplane/extra/logging"
 	"bytes"
 	"io"
 	"path/filepath"
@@ -84,7 +83,6 @@ func (self *ObjectParser) parseVersion() int {
 	if self.err != nil {
 		return -1
 	}
-	logging.Debugf("\"%v\"", tokens[0])
 	switch tokens[0] {
 	case "700":
 		return 7
@@ -254,7 +252,6 @@ func (self *ObjectParser) readLine(mandatoryLine bool) []string {
 				tokens = append(tokens, token)
 			}
 		}
-		logging.Debugf("obj7 parser line %v = %v (tokens: %v)", self.currentLine, text, len(tokens))
 		return tokens
 	}
 	if self.scanner.Err() != nil {
