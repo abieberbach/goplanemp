@@ -33,6 +33,15 @@ var taxiLightDl uint32 = 0
 var otherLightDl uint32 = 0
 
 func (self *DefaultRenderer) drawObj7Lights(renderData *planeRenderData, fieldOfViewValue float32, cameraPos camera.CameraPosition) {
+	if !renderData.lightStatus.BeaconLights&&!renderData.lightStatus.StrobeLights&&!renderData.lightStatus.LandingLights&&!renderData.lightStatus.NavLights&&!renderData.lightStatus.TaxiLights {
+		//es ist kein Licht an --> nicht zeichnen
+		return
+	}
+	lodInfo := calculateLOD(renderData.plane.CslAircraft.ObjInfo, renderData.dist)
+	if lodInfo == nil {
+		//keine LOD-Informationen --> nichts zeichnen
+		return
+	}
 	gl.MatrixMode(gl.MODELVIEW);
 	gl.PushMatrix();
 	gl.Translatef(renderData.x, renderData.y, renderData.z);
@@ -40,7 +49,6 @@ func (self *DefaultRenderer) drawObj7Lights(renderData *planeRenderData, fieldOf
 	gl.Rotatef(renderData.plane.PositionData.Pitch, 1.0, 0.0, 0.0);
 	gl.Rotatef(renderData.plane.PositionData.Roll, 0.0, 0.0, -1.0);
 
-	lodInfo := calculateLOD(renderData.plane.CslAircraft.ObjInfo, renderData.dist)
 	lights := renderData.lightStatus
 
 	offset := renderData.plane.SurfacesData.Lights.TimeOffset
@@ -73,8 +81,10 @@ func (self *DefaultRenderer) drawObj7Lights(renderData *planeRenderData, fieldOf
 	} else {
 		size = (6.7 * distance) + 12
 	}
-
 	for _, currentLight := range lodInfo.Lights {
+		if currentLight == nil {
+			continue
+		}
 		gl.MatrixMode(gl.MODELVIEW)
 		gl.PushMatrix()
 		// First we translate to our coordinate system and move the origin

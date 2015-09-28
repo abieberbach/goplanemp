@@ -87,7 +87,7 @@ func (self *DefaultRenderer) Init() {
 	registerMultiplayerDataRefs()
 }
 
-func (self *DefaultRenderer) Render(isBlend, renderAircraftLabels bool, aircrafts map[goplanemp.PlaneId]*goplanemp.Plane, ref interface{}) {
+func (self *DefaultRenderer) Render(isBlend, renderAircraftLabels bool, aircrafts []*goplanemp.Plane, ref interface{}) {
 	var startTime time.Time
 	if self.configuration.EnableRenderStatistics {
 		startTime = time.Now()

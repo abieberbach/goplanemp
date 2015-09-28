@@ -9,5 +9,5 @@ type Renderer interface {
 	//Initialisiert den Renderer.
 	Init()
 	//Zeichnet alle übergebenen Flugzeuge.
-	Render(isBlend, renderAircraftLabels bool, aircrafts map[PlaneId]*Plane, ref interface{})
+	Render(isBlend, renderAircraftLabels bool, aircrafts []*Plane, ref interface{})
 }

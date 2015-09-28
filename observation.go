@@ -21,9 +21,9 @@ func (self *MultiplayerManager) GetNthPlane(index int) (PlaneId, bool) {
 	i := 0
 	self.planesMutex.RLock()
 	defer self.planesMutex.RUnlock()
-	for id, _ := range self.planes {
+	for _, plane := range self.planes {
 		if i == index {
-			return id, true
+			return plane.PlaneId, true
 		}
 		i++
 	}
@@ -32,24 +32,22 @@ func (self *MultiplayerManager) GetNthPlane(index int) (PlaneId, bool) {
 
 //Liefert das ICAO-Kürzel und das Livery für das übergebene Flugzeug zurück. Der boolsche Wert zeigt an, ob die ID gültig war.
 func (self *MultiplayerManager) GetPlaneICAOAndLivery(id PlaneId) (icao, livery string, found bool) {
-	self.planesMutex.RLock()
-	plane, exists := self.planes[id]
-	self.planesMutex.RUnlock()
-	if exists {
+	plane, index := self.getPlane(id)
+	if index>=0 {
 		icao = plane.CslAircraft.Icao
 		livery = plane.CslAircraft.Livery
+		found=true
+	} else {
+		found = false
 	}
-	found = exists
 	return
 }
 
 //Liefert die aktuellen Daten entsprechend des Übergebenen Datentyp für das gewünschte Flugzeug zurück.
 //Alle anderen Zeiger sind nil. Zusätzlich liefert die Methode das Alter der Daten und den Rückgabewert des Callback-Moduls zurück
 func (self *MultiplayerManager) GetPlaneData(id PlaneId, dataType PlaneDataType) (int, PlaneCallbackResult, *PlanePosition, *PlaneSurfaces, *PlaneRadar) {
-	self.planesMutex.RLock()
-	plane, exists := self.planes[id]
-	self.planesMutex.RUnlock()
-	if !exists {
+	plane, index := self.getPlane(id)
+	if index==-1 {
 		return -1, Data_Unavailable, nil, nil, nil
 	}
 	now := processing.GetCycleNumber()

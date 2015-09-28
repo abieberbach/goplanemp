@@ -4,7 +4,6 @@
 
 package goplanemp
 import (
-	"github.com/abieberbach/goplane/xplm/display"
 	"github.com/abieberbach/goplane/extra/logging"
 	"fmt"
 	"sync/atomic"
@@ -15,6 +14,7 @@ import (
 	"github.com/abieberbach/goplanemp/internal/csl"
 	"github.com/abieberbach/goplanemp/internal/texture"
 	"github.com/abieberbach/goplanemp/gl"
+"github.com/abieberbach/goplane/xplm/display"
 )
 
 
@@ -26,7 +26,7 @@ type MultiplayerManager struct {
 	dumpDebugInfo        bool
 	renderAircraftLabels bool
 	counter              uint32
-	planes               map[PlaneId]*Plane
+	planes               []*Plane
 	isBlend              bool
 	wrtDataRef           dataAccess.DataRef
 	prtDataRef           dataAccess.DataRef
@@ -42,7 +42,7 @@ func New(cslFolder, relatedFile, lightsFile, defaultICAO string, config *Configu
 		return nil, errors.New(fmt.Sprintf("could not initialize OpenGL: %v", err))
 	}
 	manager := &MultiplayerManager{}
-	manager.planes = make(map[PlaneId]*Plane)
+	manager.planes = make([]*Plane, 0, 40)
 	manager.isBlend = false
 	manager.wrtDataRef = nil
 	manager.prtDataRef = nil
@@ -64,6 +64,7 @@ func (self *MultiplayerManager) Enable() error {
 	if self.renderer == nil {
 		return errors.New("no renderer available")
 	}
+	texture.TextureManagerInstance.Enable()
 	self.wrtDataRef, _ = dataAccess.FindDataRef("sim/graphics/view/world_render_type")
 	self.prtDataRef, _ = dataAccess.FindDataRef("sim/graphics/view/plane_render_type")
 	self.renderer.Init()
@@ -79,7 +80,7 @@ func (self *MultiplayerManager) CreatePlane(icao, airline, livery string, dataFu
 	plane.CslAircraft = csl.CslManagerInstance.GetAircraft(icao, airline, livery)
 	plane.updateAircraftData()
 	self.planesMutex.Lock()
-	self.planes[id] = plane
+	self.planes = append(self.planes, plane)
 	self.planesMutex.Unlock()
 	return id
 }
@@ -87,17 +88,20 @@ func (self *MultiplayerManager) CreatePlane(icao, airline, livery string, dataFu
 // Entfernt das übergebene Flugzeug aus der Überwachung des MultiplayerManagers. Nach diesem Aufruf wird das Flugzeug nicht mehr gezeichnet.
 func (self *MultiplayerManager) DestroyPlane(id PlaneId) {
 	self.planesMutex.Lock()
-	delete(self.planes, id)
+	_, index := self.getPlane(id)
+	if index != -1 {
+		self.planes[index] = self.planes[len(self.planes) - 1]
+		self.planes[len(self.planes) - 1] = nil
+		self.planes = self.planes[:len(self.planes) - 1]
+	}
 	self.planesMutex.Unlock()
 
 }
 
 // Ändert für ein Flugzeug das Aussehen. Dabei kommen die gleichen Regeln wie bei CreatePlane zum Einsatz.
 func (self *MultiplayerManager) ChangePlaneModel(id PlaneId, icao, airline, livery string) {
-	self.planesMutex.RLock()
-	plane, found := self.planes[id]
-	self.planesMutex.RUnlock()
-	if found {
+	plane, index := self.getPlane(id)
+	if index>=0 {
 		plane.CslAircraft = csl.CslManagerInstance.GetAircraft(icao, airline, livery)
 		plane.updateAircraftData()
 	}
@@ -111,4 +115,13 @@ func (self *MultiplayerManager) SetDefaultPlaneICAO(defaultICAO string) {
 //Liefert die aktuelle Konfiguration
 func (self *MultiplayerManager) GetConfiguration() *Configuration {
 	return self.configuration
+}
+
+func (self *MultiplayerManager) getPlane(id PlaneId) (*Plane, int) {
+	for index, current := range self.planes {
+		if current.PlaneId == id {
+			return current, index
+		}
+	}
+	return nil, -1
 }
